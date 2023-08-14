@@ -1,0 +1,27 @@
+package com.arreglos;
+
+import java.util.ArrayList;
+
+import com.entidades.Curso;
+import com.entidades.Retiro;
+
+public class ArregloRetiros {
+	private ArrayList<Retiro> retiros;
+	
+	//Constructor
+    public ArregloRetiros() {
+    	retiros = new ArrayList<Retiro>();
+    }
+    
+	public void adicionar(Retiro x) {
+		retiros.add(x);
+	}	
+	
+	public int tamanio() {
+		return retiros.size();
+	}
+	
+	public Retiro obtener(int i) {
+		return retiros.get(i);
+	}
+}

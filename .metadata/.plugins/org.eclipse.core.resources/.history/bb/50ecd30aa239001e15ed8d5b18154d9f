@@ -1,0 +1,330 @@
+package com.items;
+
+import java.awt.EventQueue;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import com.entidades.Alumno;
+import com.sistemaComercial.MenuPrincipal;
+
+import javax.swing.JScrollPane;
+import java.awt.Component;
+import java.awt.Desktop;
+
+import javax.swing.ScrollPaneConstants;
+import java.awt.Font;
+import javax.swing.ListSelectionModel;
+import java.awt.Dimension;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.awt.event.ActionEvent;
+import java.awt.Color;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class frmMantenimientoAlumnos extends JInternalFrame {
+	private JTable tablaAlumnos;
+	public static DefaultTableModel modeloTabla;
+	private JScrollPane scrollPane;
+	private JTextField ctNombres;
+	private JTextField ctApellidos;
+	private JTextField ctdni;
+	private JTextField ctEdad;
+	private JTextField ctCelular;
+	private JTextField ctCodigo;
+	private JComboBox cbEstado;
+	private JButton btnAdicionar;
+	private JButton btnConsultar;
+	private JButton btnModificar;
+	private JButton btnEliminar;
+	private JButton btnGuardarCambios;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frmMantenimientoAlumnos frame1 = new frmMantenimientoAlumnos();
+					frame1.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public frmMantenimientoAlumnos() {
+		setTitle("Consultar Inventario");
+		setClosable(true);
+		setBounds(100, 100, 625, 624);
+		getContentPane().setLayout(null);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(21, 286, 569, 289);
+		getContentPane().add(scrollPane);
+		
+		tablaAlumnos = new JTable();
+		tablaAlumnos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				navegar();
+			}
+		});
+		scrollPane.setViewportView(tablaAlumnos);
+		tablaAlumnos.setBorder(null);
+		tablaAlumnos.setFillsViewportHeight(true);
+		tablaAlumnos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tablaAlumnos.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		tablaAlumnos.setRowHeight(17);
+		modeloTabla = new DefaultTableModel();
+		modeloTabla.addColumn("Codigo");
+		modeloTabla.addColumn("Nombres");
+		modeloTabla.addColumn("Apellidos");
+		modeloTabla.addColumn("DNI");
+		modeloTabla.addColumn("Edad");
+		modeloTabla.addColumn("Celular");
+		modeloTabla.addColumn("Estado");
+		tablaAlumnos.setModel(modeloTabla);
+		
+		JLabel etiquetaNombres = new JLabel("NOMBRES:");
+		etiquetaNombres.setFont(new Font("Tahoma", Font.BOLD, 13));
+		etiquetaNombres.setBounds(30, 83, 65, 21);
+		getContentPane().add(etiquetaNombres);
+		
+		JLabel etiquetaApellidos = new JLabel("APELLIDOS");
+		etiquetaApellidos.setFont(new Font("Tahoma", Font.BOLD, 13));
+		etiquetaApellidos.setBounds(30, 115, 76, 21);
+		getContentPane().add(etiquetaApellidos);
+		
+		JLabel etiquetaDni = new JLabel("DNI");
+		etiquetaDni.setFont(new Font("Tahoma", Font.BOLD, 13));
+		etiquetaDni.setBounds(30, 147, 65, 21);
+		getContentPane().add(etiquetaDni);
+		
+		JLabel etiquetaEdad = new JLabel("EDAD:");
+		etiquetaEdad.setFont(new Font("Tahoma", Font.BOLD, 13));
+		etiquetaEdad.setBounds(30, 179, 65, 21);
+		getContentPane().add(etiquetaEdad);
+		
+		JLabel etiquetaCelular = new JLabel("CELULAR:");
+		etiquetaCelular.setFont(new Font("Tahoma", Font.BOLD, 13));
+		etiquetaCelular.setBounds(30, 211, 76, 21);
+		getContentPane().add(etiquetaCelular);
+		
+		ctNombres = new JTextField();
+		ctNombres.setHorizontalAlignment(SwingConstants.CENTER);
+		ctNombres.setBounds(115, 84, 172, 21);
+		getContentPane().add(ctNombres);
+		ctNombres.setColumns(10);
+		
+		ctApellidos = new JTextField();
+		ctApellidos.setHorizontalAlignment(SwingConstants.CENTER);
+		ctApellidos.setColumns(10);
+		ctApellidos.setBounds(115, 116, 172, 20);
+		getContentPane().add(ctApellidos);
+		
+		ctdni = new JTextField();
+		ctdni.setHorizontalAlignment(SwingConstants.CENTER);
+		ctdni.setColumns(10);
+		ctdni.setBounds(115, 148, 129, 20);
+		getContentPane().add(ctdni);
+		
+		ctEdad = new JTextField();
+		ctEdad.setHorizontalAlignment(SwingConstants.CENTER);
+		ctEdad.setColumns(10);
+		ctEdad.setBounds(115, 180, 65, 20);
+		getContentPane().add(ctEdad);
+		
+		ctCelular = new JTextField();
+		ctCelular.setHorizontalAlignment(SwingConstants.CENTER);
+		ctCelular.setColumns(10);
+		ctCelular.setBounds(115, 212, 129, 20);
+		getContentPane().add(ctCelular);
+
+		btnConsultar = new JButton("CONSULTAR");
+		btnConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				consultarTabla();
+			}
+		});
+		btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnConsultar.setBounds(468, 84, 123, 38);
+		getContentPane().add(btnConsultar);
+		
+		btnEliminar = new JButton("ELIMINAR");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					eliminarItem();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(desktopIcon, "Selecciona la fila a eliminar");
+				}
+			}
+		});
+		btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnEliminar.setBounds(468, 125, 123, 38);
+		getContentPane().add(btnEliminar);
+		
+		btnAdicionar = new JButton("ADICIONAR");
+		btnAdicionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (MenuPrincipal.arregloAlumnos.buscar(ctdni.getText())==null) {
+						agregarItem();
+					}
+					else {
+						mensaje("DNI ingresado ya existe!");
+					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					mensaje("Ingresa valores correctos");
+				}
+			}
+		});
+		btnAdicionar.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnAdicionar.setBounds(335, 84, 123, 38);
+		getContentPane().add(btnAdicionar);
+		
+		JLabel etiquetaTitulo = new JLabel("MANTENIMIENTO DE ALUMNOS");
+		etiquetaTitulo.setForeground(new Color(255, 0, 0));
+		etiquetaTitulo.setFont(new Font("Arial Black", Font.BOLD, 18));
+		etiquetaTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		etiquetaTitulo.setBounds(10, 11, 596, 21);
+		getContentPane().add(etiquetaTitulo);
+		
+		JLabel etiquetaEstado = new JLabel("ESTADO:");
+		etiquetaEstado.setFont(new Font("Tahoma", Font.BOLD, 13));
+		etiquetaEstado.setBounds(30, 243, 76, 21);
+		getContentPane().add(etiquetaEstado);
+		
+		cbEstado = new JComboBox();
+		cbEstado.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2"}));
+		cbEstado.setBounds(115, 243, 65, 22);
+		getContentPane().add(cbEstado);
+		
+		btnModificar = new JButton("MODIFICAR");
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (MenuPrincipal.arregloAlumnos.buscar(Integer.parseInt(ctCodigo.getText()))==null) {
+						mensaje("El alumno solicitado no existe");
+					}
+					else {
+						modificarItem(Integer.parseInt(ctCodigo.getText()));
+					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					mensaje("Ingresa valores correctos");
+				}
+			}
+		});
+		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnModificar.setBounds(335, 125, 123, 38);
+		getContentPane().add(btnModificar);
+		
+		JLabel etiquetaCodigo = new JLabel("CODIGO");
+		etiquetaCodigo.setFont(new Font("Tahoma", Font.BOLD, 13));
+		etiquetaCodigo.setBounds(30, 53, 65, 21);
+		getContentPane().add(etiquetaCodigo);
+		
+		btnGuardarCambios = new JButton("GUARDAR CAMBIOS");
+		btnGuardarCambios.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnGuardarCambios.setBounds(335, 189, 255, 38);
+		getContentPane().add(btnGuardarCambios);
+		
+		ctCodigo = new JTextField();
+		ctCodigo.setDisabledTextColor(new Color(0, 0, 0));
+		ctCodigo.setEnabled(false);
+		ctCodigo.setHorizontalAlignment(SwingConstants.CENTER);
+		ctCodigo.setColumns(10);
+		ctCodigo.setBounds(115, 54, 129, 20);
+		getContentPane().add(ctCodigo);
+	}
+	
+	
+	public void eliminarItem() {
+		int fila = tablaAlumnos.getSelectedRow();
+		MenuPrincipal.arregloAlumnos.getAlum().remove(fila);
+		modeloTabla.removeRow(fila);
+	}
+
+	public void agregarItem(){
+	    String nombres = ctNombres.getText();
+	    String apellidos = ctApellidos.getText();
+	    String dni = ctdni.getText();
+	    int edad = Integer.parseInt(ctEdad.getText());
+	    int celular = Integer.parseInt(ctCelular.getText());
+	    Alumno array= new Alumno(nombres, apellidos, dni, edad, celular, 0);
+	    MenuPrincipal.arregloAlumnos.getAlum().add(array);
+	    consultarTabla();
+    }
+      
+	public void modificarItem(int cod){
+		Alumno a = MenuPrincipal.arregloAlumnos.buscar(cod);
+	    a.setNombres(ctNombres.getText());
+	    a.setApellidos(ctApellidos.getText());
+	    a.setEdad(Integer.parseInt(ctEdad.getText()));;
+	    int celular = Integer.parseInt(ctCelular.getText());
+	    int estado = Integer.parseInt(String.valueOf(cbEstado.getSelectedItem()));
+	    Alumno array= new Alumno(nombres, apellidos, dni, edad, celular, 0);
+	    MenuPrincipal.arregloAlumnos.getAlum().add(array);
+	    consultarTabla();
+    }
+	
+	public static void consultarTabla(){
+		if(modeloTabla.getRowCount() == 0) {
+			llenarTabla();
+		}else {
+			modeloTabla.setRowCount(0);
+			llenarTabla();
+		}
+	}
+
+	private static void llenarTabla() {
+		modeloTabla.setRowCount(0);
+		for(Alumno a : MenuPrincipal.arregloAlumnos.getAlum()) {
+			Object[] ob = {a.getCodAlumno(),a.getNombres(),a.getApellidos(),a.getDni(),a.getEdad(),a.getCelular(),a.getEstado()};
+			modeloTabla.addRow(ob);
+		}
+	}
+	
+	void navegar(){
+		int fila = tablaAlumnos.getSelectedRow();
+		ctCodigo.setText("" +tablaAlumnos.getValueAt(fila, 0));
+		ctNombres.setText("" +tablaAlumnos.getValueAt(fila, 1));
+		ctApellidos.setText("" +tablaAlumnos.getValueAt(fila,2));
+		ctdni.setText("" +tablaAlumnos.getValueAt(fila, 3));
+		ctEdad.setText("" +tablaAlumnos.getValueAt(fila, 4));
+		ctCelular.setText("" +tablaAlumnos.getValueAt(fila, 5));
+		cbEstado.setSelectedItem(tablaAlumnos.getValueAt(fila, 6));
+	}
+	
+	void mensaje(String s) {
+		JOptionPane.showMessageDialog(this, s);
+	}
+
+}

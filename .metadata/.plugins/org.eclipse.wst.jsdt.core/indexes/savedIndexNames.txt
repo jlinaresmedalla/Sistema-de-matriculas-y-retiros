@@ -1,0 +1,1 @@
+INDEX VERSION 1.4+E:\04-CIBERTEC\Ciclo 02\Algoritmos_y_estructura_de_datos\PROYECTO FINAL\PR_final_Grupo3\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes

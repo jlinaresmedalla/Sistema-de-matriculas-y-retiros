@@ -1,0 +1,12 @@
+package com.entidades;
+
+public class Curso {
+	
+	private int codCurso;
+	private String asignatura;
+	private int ciclo;
+	private int creditos;
+	private int horas;
+	
+	public static int correlativo = 300001;
+}

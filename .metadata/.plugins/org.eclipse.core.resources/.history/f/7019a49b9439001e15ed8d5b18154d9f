@@ -1,0 +1,28 @@
+package com.arreglos;
+
+import java.util.ArrayList;
+
+import com.entidades.Curso;
+import com.entidades.Matricula;
+
+public class ArregloMatriculas {
+	
+	private ArrayList<Matricula> matricula;
+	
+	//Constructor
+    public ArregloMatriculas() {
+    	matricula = new ArrayList<Matricula>();
+    }
+    
+	public void adicionar(Matricula x) {
+		matricula.add(x);
+	}	
+	
+	public int tamanio() {
+		return matricula.size();
+	}
+	
+	public Matricula obtener(int i) {
+		return matricula.get(i);
+	}
+}

@@ -1,0 +1,123 @@
+package com.arreglos;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+
+import com.entidades.Curso;
+import com.entidades.Matricula;
+
+public class ArregloMatriculas {
+	
+	private ArrayList<Matricula> matricula;
+	
+	//Constructor
+    public ArregloMatriculas() {
+    	matricula = new ArrayList<Matricula>();
+    }
+    
+	public void adicionar(Matricula x) {
+		matricula.add(x);
+	}	
+	
+	public int tamanio() {
+		return matricula.size();
+	}
+	
+	public Matricula buscarNumMat(int codigo) {
+		Matricula x;
+		for (int i=0; i<tamanio(); i++) {
+			x = obtener(i);
+			if (x.getNumMatricula() == codigo) return x;
+		}
+		return null;
+	}
+	
+	public Matricula buscarAlu(int codigo) {
+		Matricula x;
+		for (int i=0; i<tamanio(); i++) {
+			x = obtener(i);
+			if (x.getCodAlumno() == codigo) return x;
+		}
+		return null;
+	}
+	
+	public Matricula buscarCur(int codigo) {
+		Matricula x;
+		for (int i=0; i<tamanio(); i++) {
+			x = obtener(i);
+			if (x.getCodCurso() == codigo) return x;
+		}
+		return null;
+	}
+	
+	public Matricula obtener(int i) {
+		return matricula.get(i);
+	}
+
+	public ArrayList<Matricula> getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(ArrayList<Matricula> matricula) {
+		this.matricula = matricula;
+	}
+	
+	private void grabarMatricula() {
+		try {
+			PrintWriter pw;
+			String linea;
+			Matricula x;
+			pw = new PrintWriter(new FileWriter("cursos.txt"));
+			for (int i=0; i<tamanio(); i++) {
+				x = obtener(i);
+				linea = x.getNumMatricula() + ";" +
+					    x.getCodAlumno() + ";" +
+						x.getCodCurso() + ";" +
+						x.getFecha() + ";" +
+						x.getHora() + ";" +
+						x.correlativo;
+				pw.println(linea);
+			}
+			pw.close();
+		}
+		catch (Exception e) {
+			System.out.println("para de grabar");
+		}
+	}
+	
+	private void cargarMatricula() {
+		try {
+			BufferedReader br;
+			String linea, fecha, hora;
+			String[] s;
+			int numMat, codAlu, codCurso, correlativo;
+			br = new BufferedReader(new FileReader("cursos.txt"));
+			while ((linea = br.readLine()) != null) {
+				s = linea.split(";");
+				numMat = Integer.parseInt(s[0].trim());
+				codAlu = s[1].trim();
+				codCurso = Integer.parseInt(s[2].trim());
+				fecha = s[3].trim();
+				hora = s[4].trim();
+				correlativo = Integer.parseInt(s[5].trim());
+				adicionar(new Curso(codigo, asignatura,ciclo, creditos, horas,correlativo));
+			}
+			br.close();
+		}
+		catch (Exception e) {
+		}
+	}
+	
+	public void grabar() {
+		grabarMatricula();
+	}
+	
+	public void cargar() {
+		cargarMatricula();
+	}
+	
+	
+}

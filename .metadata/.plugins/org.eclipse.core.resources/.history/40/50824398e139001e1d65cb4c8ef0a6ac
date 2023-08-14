@@ -1,0 +1,31 @@
+package com.arreglos;
+
+import com.entidades.Curso;
+
+import java.util.ArrayList;
+
+public class ArregloCursos {
+	
+	private ArrayList<Curso> curso;
+	
+	//Constructor
+    public ArregloCursos() {
+    	curso = new ArrayList<Curso>();
+		adicionar(new Curso("Fisica", 1,10,15));
+		adicionar(new Curso("Quimica",2,8,10 ));
+		adicionar(new Curso("Matematica",3,6,12));
+    }
+    
+	public void adicionar(Curso x) {
+		curso.add(x);
+	}	
+	
+	public int tamanio() {
+		return curso.size();
+	}
+	
+	public Curso obtener(int i) {
+		return curso.get(i);
+	}
+	
+}

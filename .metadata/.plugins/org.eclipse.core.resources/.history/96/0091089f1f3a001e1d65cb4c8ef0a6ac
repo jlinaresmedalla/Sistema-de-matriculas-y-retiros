@@ -1,0 +1,40 @@
+package com.items;
+
+import java.awt.EventQueue;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JTextArea;
+
+public class frmAluMatCur extends JInternalFrame {
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frmAluMatCur frame = new frmAluMatCur();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public frmAluMatCur() {
+		setTitle("Reporte Alumnos por Curso");
+		setBounds(100, 100, 410, 638);
+		getContentPane().setLayout(null);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(10, 117, 374, 480);
+		getContentPane().add(textArea);
+
+	}
+
+}

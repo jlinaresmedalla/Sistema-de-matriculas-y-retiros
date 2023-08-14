@@ -1,0 +1,158 @@
+package com.sistemaComercial;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
+import javax.swing.JTextField;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import java.awt.Color;
+import javax.swing.JButton;
+import javax.swing.JPasswordField;
+import java.awt.Cursor;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Component;
+
+public class SistemaComercial {
+
+	private JFrame frameVentaBiciletas;
+	private JTextField campoTextoUsuario;
+	private JPasswordField campoTextoContraseña;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					SistemaComercial window = new SistemaComercial();
+					window.frameVentaBiciletas.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public SistemaComercial() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frameVentaBiciletas = new JFrame();
+		frameVentaBiciletas.setUndecorated(true);
+		frameVentaBiciletas.setResizable(false);
+		frameVentaBiciletas.setBounds(100, 100, 605, 311);
+		frameVentaBiciletas.setLocationRelativeTo(null);
+		frameVentaBiciletas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frameVentaBiciletas.getContentPane().setLayout(null);
+		
+		campoTextoUsuario = new JTextField();
+		campoTextoUsuario.setBackground(new Color(230, 230, 230));
+		campoTextoUsuario.setBorder(null);
+		campoTextoUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+		campoTextoUsuario.setFont(new Font("Monospaced", Font.BOLD, 17));
+		campoTextoUsuario.setBounds(32, 134, 280, 26);
+		frameVentaBiciletas.getContentPane().add(campoTextoUsuario);
+		campoTextoUsuario.setColumns(10);
+		
+		JLabel etiquetaUsuario = new JLabel("USUARIO");
+		etiquetaUsuario.setForeground(new Color(255, 255, 255));
+		etiquetaUsuario.setFont(new Font("Arial Unicode MS", Font.BOLD, 20));
+		etiquetaUsuario.setBackground(new Color(255, 255, 255));
+		etiquetaUsuario.setHorizontalAlignment(SwingConstants.LEFT);
+		etiquetaUsuario.setBounds(32, 103, 280, 33);
+		frameVentaBiciletas.getContentPane().add(etiquetaUsuario);
+		
+		JLabel etiquetaUsuario_1 = new JLabel("CONTRASEÑA");
+		etiquetaUsuario_1.setHorizontalAlignment(SwingConstants.LEFT);
+		etiquetaUsuario_1.setForeground(new Color(255, 255, 255));
+		etiquetaUsuario_1.setFont(new Font("Arial Unicode MS", Font.BOLD, 20));
+		etiquetaUsuario_1.setBackground(Color.WHITE);
+		etiquetaUsuario_1.setBounds(32, 171, 280, 33);
+		frameVentaBiciletas.getContentPane().add(etiquetaUsuario_1);
+		
+		JButton botonIngresar = new JButton("INGRESAR");
+		botonIngresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ingresar();
+				limpiar();
+			}
+		});
+		botonIngresar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		botonIngresar.setForeground(new Color(255, 255, 255));
+		botonIngresar.setBackground(new Color(0, 0, 160));
+		botonIngresar.setFont(new Font("Tahoma", Font.BOLD, 15));
+		botonIngresar.setBounds(32, 242, 135, 42);
+		frameVentaBiciletas.getContentPane().add(botonIngresar);
+		
+		JButton botonSalir = new JButton("SALIR");
+		botonSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				salir();
+			}
+		});
+		botonSalir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		botonSalir.setForeground(new Color(255, 255, 255));
+		botonSalir.setBackground(new Color(0, 0, 160));
+		botonSalir.setFont(new Font("Tahoma", Font.BOLD, 15));
+		botonSalir.setBounds(177, 242, 135, 42);
+		frameVentaBiciletas.getContentPane().add(botonSalir);
+		
+		campoTextoContraseña = new JPasswordField();
+		campoTextoContraseña.setFont(new Font("Monospaced", Font.BOLD, 17));
+		campoTextoContraseña.setBackground(new Color(230, 230, 230));
+		campoTextoContraseña.setBorder(null);
+		campoTextoContraseña.setHorizontalAlignment(SwingConstants.CENTER);
+		campoTextoContraseña.setBounds(32, 202, 280, 26);
+		frameVentaBiciletas.getContentPane().add(campoTextoContraseña);
+		
+		JLabel etiquetaFondo = new JLabel("");
+		etiquetaFondo.setHorizontalAlignment(SwingConstants.LEFT);
+		etiquetaFondo.setVerticalAlignment(SwingConstants.TOP);
+		etiquetaFondo.setIcon(new ImageIcon(SistemaComercial.class.getResource("/com/recursos/bannerInicio.JPG")));
+		etiquetaFondo.setBounds(0, -35, 605, 374);
+		frameVentaBiciletas.getContentPane().add(etiquetaFondo);
+	}
+	
+	private void salir() {
+		int resp = javax.swing.JOptionPane.showConfirmDialog(frameVentaBiciletas, "¿Quiere salir de la aplicación?", "Confirmar salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if(resp == 0) {
+			System.exit(0);
+		}
+	}
+	
+	private void limpiar() {
+		campoTextoUsuario.setText("");
+		campoTextoContraseña.setText("");
+	}
+	
+	private void ingresar() {
+        String username = campoTextoUsuario.getText();
+        String password = String.valueOf(campoTextoContraseña.getPassword());
+        
+            // Verificar el usuario y contraseña
+            if (username.equals("cibertec") && password.equals("cibertec123")) {
+            	JOptionPane.showMessageDialog(frameVentaBiciletas, "Bienvenido!");
+                MenuPrincipal menuWindow = new MenuPrincipal();
+                menuWindow.setVisible(true);
+            	frameVentaBiciletas.setVisible(false);
+            } else {
+                JOptionPane.showMessageDialog(frameVentaBiciletas, "Usuario o contraseña incorrectos");
+            }
+        
+	}
+	
+}

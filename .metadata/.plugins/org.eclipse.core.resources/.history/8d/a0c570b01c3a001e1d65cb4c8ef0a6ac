@@ -1,0 +1,197 @@
+package com.items;
+
+import java.awt.EventQueue;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import com.entidades.Alumno;
+import com.sistemaComercial.MenuPrincipal;
+
+import javax.swing.JScrollPane;
+import java.awt.Component;
+import java.awt.Desktop;
+
+import javax.swing.ScrollPaneConstants;
+import java.awt.Font;
+import javax.swing.ListSelectionModel;
+import java.awt.Dimension;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.awt.event.ActionEvent;
+import java.awt.Color;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class frmReporteAluMat extends JInternalFrame {
+	private JTable tablaAlumnos;
+	public static DefaultTableModel modeloTabla;
+	private JScrollPane scrollPane;
+	private JButton btnAdicionar;
+	private JButton btnConsultar;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frmReporteAluMat frame1 = new frmReporteAluMat();
+					frame1.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public frmReporteAluMat() {
+		setTitle("Reporte de alumnos");
+		setClosable(true);
+		setBounds(100, 100, 625, 412);
+		getContentPane().setLayout(null);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(21, 113, 569, 256);
+		getContentPane().add(scrollPane);
+		
+		tablaAlumnos = new JTable();
+		tablaAlumnos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				navegar();
+			}
+		});
+		scrollPane.setViewportView(tablaAlumnos);
+		tablaAlumnos.setBorder(null);
+		tablaAlumnos.setFillsViewportHeight(true);
+		tablaAlumnos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tablaAlumnos.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		tablaAlumnos.setRowHeight(17);
+		modeloTabla = new DefaultTableModel();
+		modeloTabla.addColumn("Codigo");
+		modeloTabla.addColumn("Nombres");
+		modeloTabla.addColumn("Apellidos");
+		modeloTabla.addColumn("DNI");
+		modeloTabla.addColumn("Edad");
+		modeloTabla.addColumn("Celular");
+		modeloTabla.addColumn("Estado");
+		tablaAlumnos.setModel(modeloTabla);
+
+		btnConsultar = new JButton("CONSULTAR");
+		btnConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				consultarTabla();
+			}
+		});
+		btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnConsultar.setBounds(334, 53, 123, 38);
+		getContentPane().add(btnConsultar);
+		
+		btnAdicionar = new JButton("ADICIONAR");
+		btnAdicionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (MenuPrincipal.arregloAlumnos.buscar(ctdni.getText())==null) {
+						agregarItem();
+					}
+					else {
+						mensaje("DNI ingresado ya existe!");
+					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					mensaje("Ingresa valores correctos");
+				}
+			}
+		});
+		btnAdicionar.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnAdicionar.setBounds(146, 53, 123, 38);
+		getContentPane().add(btnAdicionar);
+		
+		JLabel etiquetaTitulo = new JLabel("REPORTE DE ALUMNOS");
+		etiquetaTitulo.setForeground(new Color(255, 0, 0));
+		etiquetaTitulo.setFont(new Font("Arial Black", Font.BOLD, 18));
+		etiquetaTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		etiquetaTitulo.setBounds(10, 11, 596, 21);
+		getContentPane().add(etiquetaTitulo);
+	}
+	
+	
+	public void eliminarItem() {
+		int fila = tablaAlumnos.getSelectedRow();
+		int estado = MenuPrincipal.arregloAlumnos.obtener(fila).getEstado();
+		if (estado == 0) {
+			int resp = javax.swing.JOptionPane.showInternalConfirmDialog(tablaAlumnos, "¿Quiere eliminar la fila seleccionada?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if(resp == 0) {
+				MenuPrincipal.arregloAlumnos.getAlum().remove(fila);
+			}
+		}else {
+			mensaje("El estado del alumno debe ser 0");
+		}
+		consultarTabla();
+	}
+
+	public void agregarItem(){
+	    String nombres = ctNombres.getText();
+	    String apellidos = ctApellidos.getText();
+	    String dni = ctdni.getText();
+	    int edad = Integer.parseInt(ctEdad.getText());
+	    int celular = Integer.parseInt(ctCelular.getText());
+	    Alumno array= new Alumno(nombres, apellidos, dni, edad, celular, 0);
+	    MenuPrincipal.arregloAlumnos.getAlum().add(array);
+	    consultarTabla();
+    }
+      
+	public void modificarItem(int cod){
+		Alumno a = MenuPrincipal.arregloAlumnos.buscar(cod);
+	    a.setNombres(ctNombres.getText());
+	    a.setApellidos(ctApellidos.getText());
+	    a.setEdad(Integer.parseInt(ctEdad.getText()));;
+	    a.setCelular(Integer.parseInt(ctCelular.getText())); ;
+	    a.setEstado(Integer.parseInt(String.valueOf(cbEstado.getSelectedItem())));;
+	    consultarTabla();
+    }
+	
+	public static void consultarTabla(){
+		if(modeloTabla.getRowCount() == 0) {
+			llenarTabla();
+		}else {
+			modeloTabla.setRowCount(0);
+			llenarTabla();
+		}
+	}
+
+	private static void llenarTabla() {
+		modeloTabla.setRowCount(0);
+		for(Alumno a : MenuPrincipal.arregloAlumnos.getAlum()) {
+			Object[] ob = {a.getCodAlumno(),a.getNombres(),a.getApellidos(),a.getDni(),a.getEdad(),a.getCelular(),a.getEstado()};
+			modeloTabla.addRow(ob);
+		}
+	}
+	
+	void mensaje(String s) {
+		JOptionPane.showMessageDialog(this, s);
+	}
+
+}

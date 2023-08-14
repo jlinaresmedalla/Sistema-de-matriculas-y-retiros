@@ -1,0 +1,183 @@
+package com.items;
+
+import java.awt.EventQueue;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import com.entidades.Alumno;
+import com.sistemaComercial.MenuPrincipal;
+
+import javax.swing.JScrollPane;
+import java.awt.Component;
+import java.awt.Desktop;
+
+import javax.swing.ScrollPaneConstants;
+import java.awt.Font;
+import javax.swing.ListSelectionModel;
+import java.awt.Dimension;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.awt.event.ActionEvent;
+import java.awt.Color;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class frmReporteAluMat extends JInternalFrame {
+	private JTable tablaAlumnos;
+	public static DefaultTableModel modeloTabla;
+	private JScrollPane scrollPane;
+	private JButton btnPendiente;
+	private JButton btnVigente;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					frmReporteAluMat frame1 = new frmReporteAluMat();
+					frame1.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public frmReporteAluMat() {
+		setTitle("Reporte de alumnos");
+		setClosable(true);
+		setBounds(100, 100, 625, 412);
+		getContentPane().setLayout(null);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(21, 113, 569, 256);
+		getContentPane().add(scrollPane);
+		
+		tablaAlumnos = new JTable();
+		tablaAlumnos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				navegar();
+			}
+		});
+		scrollPane.setViewportView(tablaAlumnos);
+		tablaAlumnos.setBorder(null);
+		tablaAlumnos.setFillsViewportHeight(true);
+		tablaAlumnos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tablaAlumnos.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		tablaAlumnos.setRowHeight(17);
+		modeloTabla = new DefaultTableModel();
+		modeloTabla.addColumn("Codigo");
+		modeloTabla.addColumn("Nombres");
+		modeloTabla.addColumn("Apellidos");
+		modeloTabla.addColumn("DNI");
+		modeloTabla.addColumn("Edad");
+		modeloTabla.addColumn("Celular");
+		modeloTabla.addColumn("Estado");
+		tablaAlumnos.setModel(modeloTabla);
+
+		btnVigente = new JButton("MATRICULA VIGENTE");
+		btnVigente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				consultarTabla();
+			}
+		});
+		btnVigente.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnVigente.setBounds(330, 53, 178, 38);
+		getContentPane().add(btnVigente);
+		
+		btnPendiente = new JButton("MATRICULA PENDIENTE");
+		btnPendiente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (MenuPrincipal.arregloAlumnos.buscar(ctdni.getText())==null) {
+						agregarItem();
+					}
+					else {
+						mensaje("DNI ingresado ya existe!");
+					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					mensaje("Ingresa valores correctos");
+				}
+			}
+		});
+		btnPendiente.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnPendiente.setBounds(100, 53, 178, 38);
+		getContentPane().add(btnPendiente);
+		
+		JLabel etiquetaTitulo = new JLabel("REPORTE DE ALUMNOS");
+		etiquetaTitulo.setForeground(new Color(255, 0, 0));
+		etiquetaTitulo.setFont(new Font("Arial Black", Font.BOLD, 18));
+		etiquetaTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		etiquetaTitulo.setBounds(0, 11, 606, 21);
+		getContentPane().add(etiquetaTitulo);
+	}
+	
+	
+	public static void consultarTablaVigente(){
+		if(modeloTabla.getRowCount() == 0) {
+			llenarTablaVigente();
+		}else {
+			modeloTabla.setRowCount(0);
+			llenarTablaVigente();
+		}
+	}
+	
+	public static void consultarTablaPendiente(){
+		if(modeloTabla.getRowCount() == 0) {
+			llenarTablaPendiente();
+		}else {
+			modeloTabla.setRowCount(0);
+			llenarTablaPendiente();
+		}
+	}
+
+	private static void llenarTablaVigente() {
+		modeloTabla.setRowCount(0);
+		for(Alumno a : MenuPrincipal.arregloAlumnos.getAlum()) {
+			if(a.getEstado() == 0) {
+			Object[] ob = {a.getCodAlumno(),a.getNombres(),a.getApellidos(),a.getDni(),a.getEdad(),a.getCelular(),a.getEstado()};
+			modeloTabla.addRow(ob);
+			}
+		}
+	}
+	
+	private static void llenarTablaPendiente() {
+		modeloTabla.setRowCount(0);
+		for(Alumno a : MenuPrincipal.arregloAlumnos.getAlum()) {
+			if(a.getEstado() == 1) {
+			Object[] ob = {a.getCodAlumno(),a.getNombres(),a.getApellidos(),a.getDni(),a.getEdad(),a.getCelular(),a.getEstado()};
+			modeloTabla.addRow(ob);
+			}
+		}
+	}
+	
+	void mensaje(String s) {
+		JOptionPane.showMessageDialog(this, s);
+	}
+
+}
